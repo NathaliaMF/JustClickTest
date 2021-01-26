@@ -3,6 +3,7 @@ package com.justclick.prueba.api;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -31,11 +32,13 @@ public class Endpoint {
 	@GetMapping("/link/{element}")
 	public ResponseEntity<ConsultResponse> searchElement ( @PathVariable String element, HttpServletResponse response, HttpServletRequest request) throws IOException {
 		try {
-			Cookie cookie = new Cookie("name", "naty");
+			String idName = UUID.randomUUID().toString();
+			System.out.println(idName);
+			Cookie cookie = new Cookie("name", idName);
 			ConsultResponse consult =  service.consultElement(element);
 			if (consult.getCode() ==200) {
 				response.addCookie(cookie);
-				jsonService.buildJson("naty", element,request.getMethod(), request.getRemoteHost(), request.getHeader("sec-ch-ua")!=null?request.getHeader("sec-ch-ua"):"", response.getStatus());
+				jsonService.buildJson(idName, element,request.getMethod(), request.getRemoteHost(), request.getHeader("sec-ch-ua")!=null?request.getHeader("sec-ch-ua"):"", response.getStatus());
 				return new ResponseEntity<>(consult, HttpStatus.OK);
 			}else{
 				return new ResponseEntity<>(consult, HttpStatus.NOT_FOUND);
@@ -46,17 +49,6 @@ public class Endpoint {
 		}
 	}
 
-	/**private void searchElement( @PathVariable String element, HttpServletResponse response, HttpServletRequest request) throws IOException {
-		Cookie cookie = new Cookie("name", "naty");
-		response.addCookie(cookie);
-		System.out.println("Method: "+request.getMethod());
-		System.out.println("Host "+request.getRemoteHost());
-		System.out.println("sec-ch-ua "+request.getHeader("sec-ch-ua"));	
-		System.out.println(""+response.getStatus());
-		service.consultElement(element);
-		jsonService.buildJson("naty", element,request.getMethod(), request.getRemoteHost(), request.getHeader("sec-ch-ua")!=null?request.getHeader("sec-ch-ua"):"", response.getStatus());
-
-	}
-	 */
+	
 
 }

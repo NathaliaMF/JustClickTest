@@ -21,7 +21,7 @@ import com.justclick.schedule.repository.IClicksRepository;
 public class ScheduledTasks {
 	@Autowired
 	IClicksRepository repository;
-	@Scheduled(cron = "0 0/59 * * * * ")
+	@Scheduled(cron = "0 0/5 * * * * ")
 	public void reportCurrentTime() throws FileNotFoundException {
 		List<Clicks> click = new ArrayList<>();
 		try {
